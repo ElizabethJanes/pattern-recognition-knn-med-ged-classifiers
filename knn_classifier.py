@@ -1,10 +1,7 @@
-import numpy as np
 from EuclideanDistance import EuclideanDistance
 
 
 def knn_classifier(k, pca_training_data, training_labels, test_data_point):
-    x = np.empty((k, 2))  # k closest training data points to test point
-    y = np.empty(k)  # labels corresponding to x
 
     class_zero = 0  # count of nearest neighbours in class zero
     class_one = 0  # count of nearest neighbours in class one
@@ -21,8 +18,6 @@ def knn_classifier(k, pca_training_data, training_labels, test_data_point):
     k_nearest_neighbours = []
     for index in range(k):
         k_nearest_neighbours.append(sorted_euclidean_distances[index])
-        # print(sorted_euclidean_distances[index].euclidean_distance)
-        # print(sorted_euclidean_distances[index].training_vector_class_label)
 
     # calculate the number of occurrences of each class out of k nearest neighbours
     for neighbour in k_nearest_neighbours:
