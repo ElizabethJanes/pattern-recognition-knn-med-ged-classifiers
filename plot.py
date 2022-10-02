@@ -3,7 +3,7 @@ import numpy as np
 from knn_classifier import knn_classifier
 
 
-def plot_knn(training_data, training_labels):
+def plot_training_data(training_data, training_labels):
     class_zero_indices = np.where(training_labels == 0)
     class_one_indices = np.where(training_labels == 1)
     class_zero_data = training_data[class_zero_indices]
