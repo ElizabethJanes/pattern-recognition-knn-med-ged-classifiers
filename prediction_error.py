@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from knn_classifier import knn_classifier
 from med_classifier import med_classifier
-from ged_classifier import ged_classifier
+from ged_classifier import ged_classifier, ged_classifier_2d
 
 
 def plot_knn_prediction_error(pca_test_data, test_labels, pca_training_data, training_labels):
@@ -49,7 +49,9 @@ def plot_med_prediction_error(pca_test_data, test_labels, class_zero_prototype, 
 def plot_ged_prediction_error(pca_test_data, test_labels, pca_training_data, training_labels, class_zero_prototype, class_one_prototype):
     incorrect_prediction_count = 0
     for test_point, test_label in zip(pca_test_data, test_labels):
-        test_classification = ged_classifier(pca_training_data, training_labels, test_point, class_zero_prototype, class_one_prototype)
+        test_classification = ged_classifier(
+            pca_training_data, training_labels, test_point, class_zero_prototype, class_one_prototype
+        )
         if test_classification != test_label:
             incorrect_prediction_count += 1
     error = incorrect_prediction_count/len(pca_test_data)
@@ -62,4 +64,24 @@ def plot_ged_prediction_error(pca_test_data, test_labels, pca_training_data, tra
     plt.xlabel('GED')
     plt.ylabel('Prediction Error')
     plt.title('GED Classifier Prediction Error')
+    plt.show()
+
+def plot_2d_ged_prediction_error(pca_test_data, test_labels, pca_training_data, training_labels, class_zero_prototype, class_one_prototype):
+    incorrect_prediction_count = 0
+    for test_point, test_label in zip(pca_test_data, test_labels):
+        test_classification = ged_classifier_2d(
+            test_point, class_zero_prototype, class_one_prototype, pca_training_data, training_labels
+        )
+        if test_classification != test_label:
+            incorrect_prediction_count += 1
+    error = incorrect_prediction_count / len(pca_test_data)
+    print(f'2D ged classification error = {error}')
+
+    # Question 2: Plot the test set error
+    k = np.array(['GED'])
+    plt.scatter(k, error)
+    plt.xlabel('GED')
+    plt.xlabel('GED')
+    plt.ylabel('Prediction Error')
+    plt.title('2D GED Classifier Prediction Error')
     plt.show()

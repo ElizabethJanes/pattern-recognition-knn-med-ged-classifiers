@@ -1,14 +1,15 @@
 from dataset_utilities import get_2d_dataset, get_20d_dataset
 from knn_classifier import knn_classifier
 from plot import plot_knn_decision_boundaries
-from prediction_error import plot_knn_prediction_error, plot_med_prediction_error, plot_ged_prediction_error
+from prediction_error import plot_knn_prediction_error, plot_med_prediction_error, plot_ged_prediction_error, plot_2d_ged_prediction_error
 from med_classifier import med_classifier, med_decision_boundary_coefficients
 from classifier_utilities import get_class_prototypes
-from ged_classifier import ged_classifier, ged_decision_boundary_coefficients
+from ged_classifier import ged_classifier, ged_decision_boundary_coefficients, ged_classifier_2d
 
 if __name__ == '__main__':
     pca_2d_training_data, training_labels_2d, pca_2d_test_data, test_labels_2d = get_2d_dataset()
     pca_20d_training_data, training_labels_20d, pca_20d_test_data, test_labels_20d = get_20d_dataset()
+    class_zero_prototype_2d, class_one_prototype_2d = get_class_prototypes(pca_2d_training_data, training_labels_2d)
     class_zero_prototype, class_one_prototype = get_class_prototypes(pca_20d_training_data, training_labels_20d)
 
     # Exercise 1: Nearest Neighbour Classifier
@@ -48,7 +49,6 @@ if __name__ == '__main__':
           f'is {test_labels_20d[0]}')
 
     # Question 1: Determine decision boundaries for MED and GED
-
     w, wo = med_decision_boundary_coefficients(class_zero_prototype, class_one_prototype)
     print(f'The coefficients of the MED decision boundary are w = {w.T} and wo = {wo}')
 
@@ -71,6 +71,28 @@ if __name__ == '__main__':
     )
 
     # Question 4: Convert training images to 2x1 vectors and plot decision boundaries for MED and GED
+    med_2d_test_classification = med_classifier(pca_2d_test_data[0], class_zero_prototype_2d, class_one_prototype_2d)
+    print(f'The test point is classified as {med_2d_test_classification} and the expected classification '
+          f'is {test_labels_2d[0]}')
+
+    plot_med_prediction_error(
+        pca_2d_test_data, test_labels_2d, class_zero_prototype_2d, class_one_prototype_2d
+    )
+
+    ged_2d_test_classification = ged_classifier_2d(
+        pca_2d_test_data[1], class_zero_prototype_2d, class_one_prototype_2d, pca_2d_training_data, training_labels_2d
+    )
+    print(f'The test point is classified as {ged_2d_test_classification} and the expected classification '
+          f'is {test_labels_2d[1]}')
+
+    plot_2d_ged_prediction_error(
+        pca_2d_test_data,
+        test_labels_2d,
+        pca_2d_training_data,
+        training_labels_2d,
+        class_zero_prototype_2d,
+        class_one_prototype_2d
+    )
 
     # Question 5: Find the confusion matrices for MED, GED, and kNN (k = [1, 5]) Classifiers using test datasets
 

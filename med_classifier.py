@@ -1,5 +1,6 @@
 import numpy as np
 from EuclideanDistance import EuclideanDistance
+from classifier_utilities import get_class_zero_training_data, get_class_one_training_data
 
 
 def med_classifier(test_data_point, class_zero_prototype, class_one_prototype):
@@ -16,5 +17,4 @@ def med_decision_boundary_coefficients(class_zero_prototype, class_one_prototype
     w = class_zero_prototype - class_one_prototype
     wo = 1/2*(np.dot(class_one_prototype, class_one_prototype) - np.dot(class_zero_prototype, class_zero_prototype))
     return w, wo
-
 
