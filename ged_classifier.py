@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from classifier_utilities import get_class_zero_training_data, get_class_one_training_data
 
 
@@ -71,10 +72,6 @@ def ged_classifier_2d(test_data_point, class_zero_prototype, class_one_prototype
 def compute_2d_general_euclidean_distance(class_training_data, class_prototype, test_data_point_vector, eigenvectors):
     sigma = np.cov(class_training_data.transpose())
 
-    # temporary!
-    # real_eigenvalues, real_eigenvectors = np.linalg.eig(sigma)
-    # print(real_eigenvectors)
-
     # compute eigenvalues of sigma
     determinant_expansion = np.polynomial.polynomial.Polynomial(
         coef=[(sigma[0, 0] * sigma[1, 1]) - (sigma[0, 1] * sigma[1, 0]), (-sigma[1, 1] - sigma[0, 0]), 1]
@@ -101,3 +98,40 @@ def get_class_one_eigenvectors():
     # Eigenvectors were computed by hand
     one_eigenvectors = np.array([[0.9997, -0.0239], [0.0239, 0.9997]])
     return one_eigenvectors
+
+
+def ged_decision_boundary_function(q0, q1, q2, x1, x2):
+    x = np.array([x1, x2])
+    boundary_point = np.dot(np.dot(x, q0), x) + np.dot(q1, x) + q2
+    return boundary_point
+
+
+def plot_2d_ged_decision_boundary(training_data, training_labels, q0, q1, q2):
+    class_zero_indices = np.where(training_labels == 0)
+    class_one_indices = np.where(training_labels == 1)
+    class_zero_data = training_data[class_zero_indices]
+    class_one_data = training_data[class_one_indices]
+
+    step = 1
+    x1 = np.arange(-1500, 2500, step)
+    x2 = np.arange(-1000, 2000, step)
+
+    function_values = np.ndarray((x2.shape[0], x1.shape[0]), dtype=np.float32)
+
+    for i in range(x2.shape[0]):
+        for j in range(x1.shape[0]):
+            function_val = ged_decision_boundary_function(
+                q0, q1, q2, x1[j], x2[i]
+            )
+            function_values[i, j] = function_val
+
+    ha, = plt.plot(class_zero_data[:, 0], class_zero_data[:, 1], 'r.', label='Class Zero')
+    hb, = plt.plot(class_one_data[:, 0], class_one_data[:, 1], 'b.', label='Class One')
+    ctr = plt.contour(x1, x2, function_values, levels=(0,), colors='k')
+    h_bnd, _ = ctr.legend_elements()
+    plt.xlabel('$x_1$')
+    plt.ylabel('$x_2$')
+    plt.legend([ha, hb, h_bnd[0]], ['Class Zero', 'Class One', 'Classifier Boundary'])
+    plt.title(f'2D GED Classifier Decision Boundary')
+
+    plt.show()

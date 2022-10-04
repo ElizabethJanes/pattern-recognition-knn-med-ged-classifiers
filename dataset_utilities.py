@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import torch
 from torchvision import datasets
 from sklearn.decomposition import PCA
 
@@ -23,11 +22,9 @@ def get_2d_dataset():
     target_training_labels = training_labels[target_indices]
 
     reshaped_training_data = np.reshape(target_training_data, (len(target_training_data), 784))
-    print(reshaped_training_data.shape)
 
     pca = PCA(n_components=2)
     pca_reshaped_training_data = pca.fit_transform(reshaped_training_data)
-    print(pca_reshaped_training_data.shape)
 
     target_test_indices = np.where((test_labels == 0) | (test_labels == 1))
     target_test_data = test_data[target_test_indices]
@@ -57,11 +54,9 @@ def get_20d_dataset():
     target_training_labels = training_labels[target_indices]
 
     reshaped_training_data = np.reshape(target_training_data, (len(target_training_data), 784))
-    print(reshaped_training_data.shape)
 
     pca = PCA(n_components=20)
     pca_reshaped_training_data = pca.fit_transform(reshaped_training_data)
-    print(pca_reshaped_training_data.shape)
 
     target_test_indices = np.where((test_labels == 0) | (test_labels == 1))
     target_test_data = test_data[target_test_indices]
