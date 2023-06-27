@@ -1,2 +1,2 @@
-# syde-572-pattern-recognition-assignment-1
+# pattern-recognition-knn-med-ged-classifiers
  
